@@ -36,3 +36,41 @@ def clean_text(text: str) -> str:
 
     tokens = [w for w in text.split() if w not in CUSTOM_STOPWORDS and len(w) > 1]
     return " ".join(tokens)
+
+
+# ================================================================
+# Contrast & Conclusion Analysis Helpers (digunakan oleh predict.py)
+# ================================================================
+
+# Kata yang menandakan pergantian arah sentimen dalam kalimat
+CONTRAST_WORDS = {
+    "but", "however", "though", "although", "despite", "yet",
+    "that said", "thankfully", "overall", "nonetheless", "nevertheless",
+    "even so", "regardless", "still"
+}
+
+# Kata penutup positif yang sering muncul di kalimat terakhir review
+POSITIVE_CONCLUSION_WORDS = {
+    "worth", "recommend", "love", "enjoy", "enjoyed", "great", "good",
+    "amazing", "fantastic", "solid", "fun", "glad", "satisfied",
+    "awesome", "excellent", "brilliant", "still enjoy", "still love",
+    "still good", "still worth"
+}
+
+
+def get_last_sentence(text: str) -> str:
+    """Ambil kalimat terakhir dari teks — biasanya mencerminkan kesimpulan review."""
+    sentences = [s.strip() for s in re.split(r'[.!?]+', text) if s.strip()]
+    return sentences[-1] if sentences else text
+
+
+def detect_contrast(text: str) -> bool:
+    """Cek apakah review mengandung kata contrast/concession (misal: 'but', 'however')."""
+    lower = text.lower()
+    return any(word in lower for word in CONTRAST_WORDS)
+
+
+def has_positive_conclusion(text: str) -> bool:
+    """Cek apakah kalimat terakhir mengandung kata positif — sinyal kesimpulan positif."""
+    last = get_last_sentence(text).lower()
+    return any(word in last for word in POSITIVE_CONCLUSION_WORDS)
