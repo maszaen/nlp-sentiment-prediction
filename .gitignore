@@ -19,9 +19,11 @@ pip-delete-this-directory.txt
 *.csv
 
 # ============================================
-# Model binaries (bisa di-regenerate)
+# Model binaries
+# (pkl files di-track — ukuran aman untuk GitHub)
+# Hanya test_split.pkl yang besar (~25MB), masih dalam batas 100MB
 # ============================================
-model/*.pkl
+# model/*.pkl  ← di-uncomment jika ingin exclude
 
 # ============================================
 # Jupyter Notebook
